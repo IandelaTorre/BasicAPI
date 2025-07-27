@@ -1,13 +1,13 @@
 require('dotenv').config();
 const { generateToken } = require('../../../config/jwtConfig');
 const { comparePassword } = require('../../../utils/passwordUtils');
-const { getUserByEmail } = require('../../users/models/users');
+const { getUserByEmail, setUserLog } = require('../../users/models/users');
 
 exports.LoginSession = async (req, res, next) => {
     try {
         const { user, password, time } = req.body;
 
-        const loginUser = await getUserByEmail(user.trim(), 'ebe29750-9807-47b8-b68b-b3f5b2f61e97');
+        const loginUser = await getUserByEmail(user.trim());
 
         if (loginUser) {
             const correctPassword = await comparePassword(password.trim(), loginUser.password);
@@ -21,6 +21,11 @@ exports.LoginSession = async (req, res, next) => {
                     .status(200)
                     .header('Authorization', `Bearer ${sessionToken}`)
                     .json(loginUser);
+                    
+            return setUserLog("login user", loginUser.uuid)
+            .catch(err => {
+                console.error("Error al guardar log:", err);
+            })
             } else {
                 res.status(503).json({ usuario: "La contraseña no coincide con nuestros registros. Por favor, verifica e intenta nuevamente." });
             }
