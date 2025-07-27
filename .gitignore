@@ -4,4 +4,3 @@ node_modules
 
 # Ignore Prisma generated files
 /generated/prisma
-/prisma/generated
