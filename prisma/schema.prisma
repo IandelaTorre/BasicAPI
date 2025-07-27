@@ -37,11 +37,11 @@ model User {
 model UserLog {
   id        Int      @id @default(autoincrement())
   uuid      String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId    Int
+  userUuid  String   @db.Uuid
   action    String
   createdAt DateTime @default(now())
 
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userUuid], references: [uuid])
 
   @@schema("user")
 }

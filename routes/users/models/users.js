@@ -6,7 +6,8 @@ const { hashPassword } = require('../../../utils/passwordUtils');
 exports.getUserByEmail = async (email) => {
     return await prisma.user.findUnique({
         where: {
-            email: email
+            email: email,
+            enabled: true
         }, 
         include: {
             rol: true
@@ -17,7 +18,11 @@ exports.getUserByEmail = async (email) => {
 exports.getUserByUuid = async (uuid) => {
     return await prisma.user.findUnique({
         where: {
-            uuid: uuid
+            uuid: uuid,
+            enabled: true
+        },
+        include: {
+            rol: true
         }
     })
 }
@@ -49,4 +54,13 @@ exports.deleteUser = async (uuid) => {
             enabled: false,
         }
     })
+}
+
+exports.setUserLog = async (message, user_uuid) => {
+    return await prisma.userLog.create({
+        data: {
+            action: message,
+            userUuid: user_uuid
+        }
+    });
 }

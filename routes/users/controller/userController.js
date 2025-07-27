@@ -1,7 +1,7 @@
-const { getUserByEmail, getUserByUuid, createUser, editUser, deleteUser } = require("../models/users");
+const { getUserByEmail, getUserByUuid, createUser, editUser, deleteUser, setUserLog } = require("../models/users");
 
 
-exports.getUserByEmail = (req, res, next) => {
+exports.getUserByEmail = async (req, res, next) => {
     const { email } = req.params;
     const { user_uuid } = req.query;
 
@@ -12,18 +12,17 @@ exports.getUserByEmail = (req, res, next) => {
             }
             res.json(user);
 
-            // Log después de responder
-            return setUserLog(email, "get user by email", user_uuid);
-        })
-        .then(() => {
-            console.log("User log updated");
+            return setUserLog("get user by email", user_uuid)
+                .catch(err => {
+                    console.error("Error al guardar log:", err);
+                });
         })
         .catch(err => {
             next(err);
-        })
+        });
 }
 
-exports.getUser = (req, res, next) => {
+exports.getUser = async (req, res, next) => {
     const { uuid } = req.params;
     const { user_uuid } = req.query;
 
@@ -34,37 +33,36 @@ exports.getUser = (req, res, next) => {
             }
             res.json(user);
 
-            // Log después de responder
-            return setUserLog(uuid, "get user by uuid", user_uuid);
-        })
-        .then(() => {
-            console.log("User log updated");
+            return setUserLog("get user by uuid", user_uuid)
+            .catch(err => {
+                console.error("Error al guardar log:", err);
+            });
         })
         .catch(err => {
             next(err);
         })
 }
 
-exports.createUser = (req, res, next) => {
+exports.createUser = async (req, res, next) => {
     const userData = req.body;
     const { user_uuid } = req.query;
     createUser(userData)
         .then(user => {
             res.status(201).json(user);
 
-            // Log después de responder
-            return setUserLog(userData.email, "create user", user_uuid);
-        })
-        .then(() => {
-            console.log("User log updated");
+            return setUserLog("create user", user_uuid)
+            .catch(err => {
+                console.error("Error al guardar log:", err);
+            });
         })
         .catch(err => {
             next(err);
         })
     }
 
-exports.editUser = (req, res, next) => {
+exports.editUser = async (req, res, next) => {
     const { uuid } = req.params;
+    const { user_uuid } = req.query;
     const userData = req.body;
 
     editUser(uuid, userData)
@@ -72,28 +70,22 @@ exports.editUser = (req, res, next) => {
             if (!user) {
                 return res.status(404).json({ message: 'Usuario no encontrado' });
             }
-
             res.json(user);
 
-            // Log después de responder
-            return setUserLog(uuid, "edit user", userData.user_uuid);
-        })
-        .then(() => {
-            console.log("User log updated");
+            return setUserLog("edit user", user_uuid)
+            .catch(err => {
+                console.error("Error al guardar log:", err);
+            });
         })
         .catch(err => {
-            console.error("Error editing user or saving log:", err);
             next(err);
         });
 };
 
 
-exports.deleteUser = (req, res, next) => {
+exports.deleteUser = async (req, res, next) => {
     const { uuid } = req.params; 
     const { user_uuid } = req.query;
-
-    console.log("params: ", uuid, user_uuid);
-    
 
     deleteUser(uuid)
     .then(user => {
@@ -102,11 +94,10 @@ exports.deleteUser = (req, res, next) => {
         }
         res.status(204).send();
 
-        // Log después de responder
-            return setUserLog(uuid, "delete user", user_uuid);
-    })
-    .then(() => {
-        console.log("User log updated");
+        return setUserLog("delete user", user_uuid)
+        .catch(err => {
+            console.error("Error al guardar log:", err);
+        })
     })
     .catch(err => {
         next(err);
