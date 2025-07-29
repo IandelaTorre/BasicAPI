@@ -27,10 +27,10 @@ exports.LoginSession = async (req, res, next) => {
                 console.error("Error al guardar log:", err);
             })
             } else {
-                res.status(503).json({ usuario: "La contraseña no coincide con nuestros registros. Por favor, verifica e intenta nuevamente." });
+                res.status(401).json({ usuario: "La contraseña no coincide con nuestros registros. Por favor, verifica e intenta nuevamente." });
             }
         } else {
-            res.status(503).json({ usuario: "No encontramos este usuario. Por favor, verifica que esté escrito correctamente." });
+            res.status(401).json({ usuario: "No encontramos este usuario. Por favor, verifica que esté escrito correctamente." });
         }
     } catch (error) {
         next(error);
