@@ -1,47 +1,38 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DATABASE_DIRECT_URL")
-  schemas = ["user", "catalogs"]
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+  schemas   = ["catalogs", "user"]
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  uuid      String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email     String   @unique
-  name      String?
-  lastName  String?
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  name           String?
+  lastName       String?
   secondLastName String?
-  password  String? 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  enabled   Boolean  @default(true)
-  rolId  Int
-
-  logs      UserLog[]
-  rol       Cat_Rols @relation(fields: [rolId], references: [id])
+  password       String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  enabled        Boolean   @default(true)
+  rolId          Int
+  uuid           String    @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  rol            Cat_Rols  @relation(fields: [rolId], references: [id])
+  logs           UserLog[]
 
   @@schema("user")
 }
 
 model UserLog {
   id        Int      @id @default(autoincrement())
-  uuid      String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userUuid  String   @db.Uuid
   action    String
   createdAt DateTime @default(now())
-
+  uuid      String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userUuid  String   @db.Uuid
   user      User     @relation(fields: [userUuid], references: [uuid])
 
   @@schema("user")
@@ -49,10 +40,10 @@ model UserLog {
 
 model Cat_Url {
   id                 Int                  @id @default(autoincrement())
-  uuid               String               @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   url                String
   code               String               @unique(map: "unique_cat_urls_code")
-  enabled             Boolean              @default(true)
+  enabled            Boolean              @default(true)
+  uuid               String               @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   Cat_rol_Permission Cat_rol_Permission[]
 
   @@schema("catalogs")
@@ -60,10 +51,10 @@ model Cat_Url {
 
 model Cat_rol_Permission {
   id          Int      @id @default(autoincrement())
-  uuid        String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   cat_rols_id Int
   cat_url_id  Int
-  enabled      Boolean  @default(true)
+  enabled     Boolean  @default(true)
+  uuid        String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   catRol      Cat_Rols @relation(fields: [cat_rols_id], references: [id])
   catUrl      Cat_Url  @relation(fields: [cat_url_id], references: [id])
 
@@ -72,11 +63,11 @@ model Cat_rol_Permission {
 
 model Cat_Rols {
   id                 Int                  @id @default(autoincrement())
-  uuid      String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name               String               @unique(map: "unique_cat_rols_name")
   visual_name        String
   createdAt          DateTime             @default(now())
   enabled            Boolean              @default(true)
+  uuid               String               @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   Cat_rol_Permission Cat_rol_Permission[]
   User               User[]
 

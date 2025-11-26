@@ -17,4 +17,12 @@ router.use('/user', require('./users/index'));
  */
 router.use('/login', require('./login/index'));
 
+/**
+ * @swagger
+ * tags:
+ *   name: Health
+ *   description: Health check endpoint
+ */
+router.use('/health', require('./me/index'));
+
 module.exports = router;
