@@ -45,7 +45,7 @@ router.post('/create-user', userController.createUser);
  *                   type: string
  *                   example: 'Hola, mundo!'
  */
-router.get('/get-user/:uuid', verifyToken, authorize('user.user:read'), userController.getUser);
+router.get('/get-user/:uuid', authorize('user.user:read'), userController.getUser);
 
 /**
  * @swagger
@@ -67,7 +67,7 @@ router.get('/get-user/:uuid', verifyToken, authorize('user.user:read'), userCont
  *                   type: string
  *                   example: 'Hola, mundo!'
  */
-router.get('/get-user-by-email/:email', verifyToken, authorize('user.user:read'), userController.getUserByEmail);
+router.get('/get-user-by-email/:email', authorize('user.user:read'), userController.getUserByEmail);
 
 /**
  * @swagger
@@ -89,7 +89,7 @@ router.get('/get-user-by-email/:email', verifyToken, authorize('user.user:read')
  *                   type: string
  *                   example: 'Hola, mundo!'
  */
-router.patch('/edit-user/:uuid', verifyToken, authorize('user.user:write'), userController.editUser);
+router.patch('/edit-user/:uuid', authorize('user.user:write'), userController.editUser);
 
 /**
  * @swagger
@@ -111,6 +111,6 @@ router.patch('/edit-user/:uuid', verifyToken, authorize('user.user:write'), user
  *                   type: string
  *                   example: 'Hola, mundo!'
  */
-router.get('/delete-user/:uuid', verifyToken, authorize('user.user:erase'), userController.deleteUser);
+router.get('/delete-user/:uuid', authorize('user.user:erase'), userController.deleteUser);
 
 module.exports = router;

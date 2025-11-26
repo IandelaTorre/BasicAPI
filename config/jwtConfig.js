@@ -6,6 +6,7 @@ const generateToken = (user, time = 1) => {
     return jwt.sign(
         {
             id: user.id,
+            uuid: user.uuid,
             email: user.email,
             rolId: user.id,
             rol: user.rol.name

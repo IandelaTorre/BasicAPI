@@ -1,13 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-/**
- * @swagger
- * tags:
- *   name: Usuarios
- *   description: Gestión de usuarios.
- */
-router.use('/user', require('./users/index'));
+const { verifyToken } = require('../config/jwtConfig');
+const { requestLogger } = require('../middlewares/requestLogger');
 
 /**
  * @swagger
@@ -15,7 +10,17 @@ router.use('/user', require('./users/index'));
  *   name: Auth
  *   description: Gestión de la sesión
  */
+// Login PÚBLICO
 router.use('/login', require('./login/index'));
+
+/**
+ * @swagger
+ * tags:
+ *   name: Usuarios
+ *   description: Gestión de usuarios.
+ */
+// Rutas de usuarios PROTEGIDAS + con log
+router.use('/user', verifyToken, requestLogger, require('./users/index'));
 
 /**
  * @swagger
@@ -23,6 +28,15 @@ router.use('/login', require('./login/index'));
  *   name: Health
  *   description: Health check endpoint
  */
-router.use('/health', require('./me/index'));
+// Si quieres que /health también requiera token y se loguee:
+router.use('/health', verifyToken, requestLogger, require('./me/index'));
+
+/**
+ * @swagger
+ * tags:
+ *   name: Catalogs
+ *   description: Gestión de catálogos
+ */
+router.use('/catalogs', verifyToken, requestLogger, require('./catalogs/index'));
 
 module.exports = router;
