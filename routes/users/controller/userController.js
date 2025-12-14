@@ -1,4 +1,4 @@
-// routes/users/controller/userController.js
+const { default: generateRandomCharacters } = require("../../../utils/createCode");
 const {
   getUserByEmail,
   getUserByUuid,
@@ -9,7 +9,11 @@ const {
 
 exports.createUser = async (req, res, next) => {
   try {
-    const userData = req.body;
+  if (!req.body) {
+    return res.status(400).json({ message: "Datos de usuario faltantes" });
+  }
+    const user_code = req.body.name.replaceAll(" ", "").slice(0, 3) + "-" + generateRandomCharacters(5);
+    const userData = { ...req.body, user_code };
     const user = await createUser(userData);
     return res.status(201).json(user);
   } catch (error) {
