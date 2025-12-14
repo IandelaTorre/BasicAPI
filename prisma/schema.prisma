@@ -21,6 +21,7 @@ model User {
   enabled        Boolean   @default(true)
   rolId          Int
   uuid           String    @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_code      String    @unique
   rol            Cat_Rols  @relation(fields: [rolId], references: [id])
   logs           UserLog[]
 
