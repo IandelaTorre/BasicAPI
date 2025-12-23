@@ -26,7 +26,7 @@ loadRolePermissions()
     .then(() => console.log('✔ Permisos cargados desde BD'))
     .catch(err => {
         console.error('❌ No se pudieron cargar permisos:', err);
-        process.exit(1);       // opcional, para no iniciar sin permisos
+        // process.exit(1);      
     });
 
 // Ruta para la documentación de Swagger
