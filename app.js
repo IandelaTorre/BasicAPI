@@ -1,3 +1,4 @@
+require('dns').setDefaultResultOrder('ipv4first');
 require('dotenv').config(); // Cargar las variables de entorno
 const express = require('express');
 const morgan = require('morgan');
