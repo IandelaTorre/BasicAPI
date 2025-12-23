@@ -21,6 +21,9 @@ const maskDbUrl = (s = "") => s.replace(/\/\/([^:]+):([^@]+)@/, "//$1:***@");
 console.log("DATABASE_URL:", maskDbUrl(process.env.DATABASE_URL || ""));
 console.log("DIRECT_URL:", maskDbUrl(process.env.DIRECT_URL || ""));
 
+const dns = require("dns");
+console.log("Default DNS order:", dns.getDefaultResultOrder?.());
+
 
 const { loadRolePermissions } = require('./utils/permissionService');
 loadRolePermissions()
