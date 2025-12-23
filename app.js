@@ -15,6 +15,12 @@ const { notFoundHandler } = require('./middlewares/notFoundHandler');
 
 const app = express();
 
+const maskDbUrl = (s = "") => s.replace(/\/\/([^:]+):([^@]+)@/, "//$1:***@");
+
+console.log("DATABASE_URL:", maskDbUrl(process.env.DATABASE_URL || ""));
+console.log("DIRECT_URL:", maskDbUrl(process.env.DIRECT_URL || ""));
+
+
 const { loadRolePermissions } = require('./utils/permissionService');
 loadRolePermissions()
     .then(() => console.log('✔ Permisos cargados desde BD'))
