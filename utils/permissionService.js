@@ -22,8 +22,7 @@ async function loadRolePermissions(retryCount = 0) {
                     where: { enabled: true },
                     include: { catUrl: true } 
                 }
-            },
-            timeout: 10000
+            }
         });
         
         console.log(`✅ Se encontraron ${roles.length} roles en la base de datos`);
