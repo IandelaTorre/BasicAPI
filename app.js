@@ -26,12 +26,15 @@ console.log("Default DNS order:", dns.getDefaultResultOrder?.());
 
 
 const { loadRolePermissions } = require('./utils/permissionService');
-loadRolePermissions()
-    .then(() => console.log('✔ Permisos cargados desde BD'))
-    .catch(err => {
-        console.error('❌ No se pudieron cargar permisos:', err);
-        // process.exit(1);      
-    });
+
+setTimeout(() => {
+    loadRolePermissions()
+        .then(() => console.log('✔ Permisos cargados desde BD'))
+        .catch(err => {
+            console.error('❌ No se pudieron cargar permisos:', err);
+            console.log('⚠️  El servidor continuará ejecutándose. Los permisos se intentarán cargar más tarde.');
+        });
+}, 2000);
 
 // Ruta para la documentación de Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

@@ -32,7 +32,8 @@ router.use('/user', requestLogger, require('./users/index'));
  *   name: Health
  *   description: Health check endpoint
  */
-router.use('/health', verifyToken, requestLogger, require('./me/index'));
+router.use('/health', require('./health/index'));
+router.use('/me', verifyToken, requestLogger, require('./me/index'));
 
 /**
  * @swagger
